@@ -1,6 +1,5 @@
-def main():
-    print("Hello from cryptorisk!")
+from fastapi import FastAPI
+from app.api.health import router as health_router
 
-
-if __name__ == "__main__":
-    main()
+app = FastAPI(title="Crypto Risk API")
+app.include_router(health_router)
