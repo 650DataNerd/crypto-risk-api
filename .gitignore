@@ -11,3 +11,5 @@ wheels/
 *.save
 *.swp
 *~
+.env
+.env.*
