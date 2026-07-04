@@ -10,6 +10,6 @@ def list_portfolios():
     return get_portfolios()
 
 
-@router.post("/", response_model=PortfolioResponse)
+@router.post("/", response_model=PortfolioResponse, status_code=201)
 def create_new_portfolio(data: PortfolioCreate):
     return create_portfolio(data)
