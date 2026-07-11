@@ -19,3 +19,13 @@ class PortfolioRepository:
         await self.db.commit()
         await self.db.refresh(portfolio)
         return portfolio
+
+
+    async def get_by_id(self, portfolio_id: int, user_id: int):
+        result = await self.db.execute(
+            select(Portfolio).where(
+                Portfolio.id == portfolio_id,
+                Portfolio.user_id == user_id
+            )
+        )
+        return result.scalar_one_or_none()
