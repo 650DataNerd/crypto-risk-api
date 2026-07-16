@@ -1,3 +1,6 @@
+import os
+os.environ["TESTING"] = "true"
+
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
@@ -6,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from app.core.config import settings
 from app.core.database import Base, get_db
 from app.models import User, Portfolio, Holding, PriceSnapshot
+from app.core.security import hash_password
 from main import app
 
 
@@ -44,12 +48,23 @@ async def test_user(db_session):
     user = User(
         name="Test User",
         email="test@example.com",
-        hashed_password="not-a-real-hash",
+        hashed_password=hash_password("testpassword123"),
         is_active=True,
     )
     db_session.add(user)
     await db_session.flush()
     return user
+
+
+@pytest_asyncio.fixture
+async def auth_client(client, test_user):
+    response = await client.post("/auth/login", json={
+        "email": "test@example.com",
+        "password": "testpassword123",
+    })
+    token = response.json()["access_token"]
+    client.headers.update({"Authorization": f"Bearer {token}"})
+    return client
 
 
 @pytest_asyncio.fixture

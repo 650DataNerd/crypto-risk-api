@@ -13,6 +13,7 @@ dependencies = [
     "passlib[argon2]>=1.7.4",
     "pydantic-settings>=2.14.2",
     "python-jose[cryptography]>=3.5.0",
+    "slowapi>=0.1.10",
     "sqlalchemy>=2.0.51",
     "uvicorn>=0.49.0",
 ]
