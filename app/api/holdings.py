@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
+from app.core.dependencies import get_current_user
+from app.models.user import User
 from app.schemas.holding import HoldingCreate, HoldingResponse
 from app.services.holding_service import create_holding, get_holdings
 from app.repositories.portfolio_repository import PortfolioRepository
@@ -8,9 +10,13 @@ from app.repositories.portfolio_repository import PortfolioRepository
 router = APIRouter(prefix="/portfolios/{portfolio_id}/holdings", tags=["holdings"])
 
 
-async def get_portfolio_or_404(portfolio_id: int, db: AsyncSession = Depends(get_db)):
+async def get_portfolio_or_404(
+    portfolio_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     repo = PortfolioRepository(db)
-    portfolio = await repo.get_by_id(portfolio_id=portfolio_id, user_id=1)
+    portfolio = await repo.get_by_id(portfolio_id=portfolio_id, user_id=current_user.id)
     if not portfolio:
         raise HTTPException(status_code=404, detail="Portfolio not found")
     return portfolio
@@ -20,6 +26,7 @@ async def get_portfolio_or_404(portfolio_id: int, db: AsyncSession = Depends(get
 async def list_holdings(
     portfolio_id: int,
     db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
     portfolio=Depends(get_portfolio_or_404),
 ):
     return await get_holdings(db=db, portfolio_id=portfolio_id)
@@ -30,6 +37,7 @@ async def create_new_holding(
     portfolio_id: int,
     data: HoldingCreate,
     db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
     portfolio=Depends(get_portfolio_or_404),
 ):
     return await create_holding(db=db, portfolio_id=portfolio_id, data=data)
