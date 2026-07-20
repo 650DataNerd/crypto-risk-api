@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     algorithm: str
     access_token_expire_minutes: int
     testing: bool = False
+    redis_url: str
 
     model_config = SettingsConfigDict(env_file=".env")
 
