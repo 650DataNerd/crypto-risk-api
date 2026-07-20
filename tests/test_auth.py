@@ -57,3 +57,16 @@ async def test_login_unknown_email_returns_401(client):
 async def test_protected_route_without_token_returns_401(client):
     response = await client.get("/portfolios/")
     assert response.status_code == 401
+
+
+async def test_me_returns_current_user(auth_client, test_user):
+    response = await auth_client.get("/auth/me")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["email"] == "test@example.com"
+    assert "hashed_password" not in data
+
+
+async def test_me_without_token_returns_401(client):
+    response = await client.get("/auth/me")
+    assert response.status_code == 401
