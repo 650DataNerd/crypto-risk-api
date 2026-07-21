@@ -1,5 +1,6 @@
+import asyncio
+import logging
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -8,7 +9,9 @@ from app.api.auth import router as auth_router
 from app.api.portfolio import router as portfolio_router
 from app.api.holdings import router as holdings_router
 from app.core.middleware import security_headers_middleware
+from app.worker import start_worker
 
+logging.basicConfig(level=logging.INFO)
 limiter = Limiter(key_func=get_remote_address)
 
 app = FastAPI(title="Crypto Risk API")
@@ -20,3 +23,8 @@ app.include_router(health_router)
 app.include_router(auth_router)
 app.include_router(portfolio_router)
 app.include_router(holdings_router)
+
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(start_worker(interval_seconds=60))
