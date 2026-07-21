@@ -1,8 +1,10 @@
 import httpx
 import json
 from decimal import Decimal
+from datetime import datetime, timezone, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.cache import set_cached
+from sqlalchemy import select
+from app.core.cache import set_cached, get_cached
 from app.models.price_snapshot import PriceSnapshot
 
 
@@ -28,12 +30,25 @@ async def fetch_prices() -> dict:
         return response.json()
 
 
+async def already_ingested_recently(db: AsyncSession, symbol: str, within_seconds: int = 50) -> bool:
+    cutoff = datetime.now(timezone.utc) - timedelta(seconds=within_seconds)
+    result = await db.execute(
+        select(PriceSnapshot)
+        .where(PriceSnapshot.symbol == symbol)
+        .where(PriceSnapshot.recorded_at >= cutoff)
+        .limit(1)
+    )
+    return result.scalar_one_or_none() is not None
+
+
 async def ingest_prices(db: AsyncSession) -> None:
     raw = await fetch_prices()
 
     for coingecko_id, symbol in SYMBOL_MAP.items():
-        price_usd = raw[coingecko_id]["usd"]
+        if await already_ingested_recently(db, symbol):
+            continue
 
+        price_usd = raw[coingecko_id]["usd"]
         snapshot = PriceSnapshot(
             symbol=symbol,
             price=Decimal(str(price_usd)),
@@ -50,7 +65,6 @@ async def ingest_prices(db: AsyncSession) -> None:
 
 
 async def get_latest_price(symbol: str) -> Decimal | None:
-    from app.core.cache import get_cached
     cached = await get_cached(f"price:{symbol}")
     if cached:
         data = json.loads(cached)
