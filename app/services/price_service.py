@@ -1,7 +1,7 @@
 import httpx
 import json
 from decimal import Decimal
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.core.cache import set_cached, get_cached
@@ -31,7 +31,7 @@ async def fetch_prices() -> dict:
 
 
 async def already_ingested_recently(db: AsyncSession, symbol: str, within_seconds: int = 50) -> bool:
-    cutoff = datetime.now(timezone.utc) - timedelta(seconds=within_seconds)
+    cutoff = datetime.utcnow() - timedelta(seconds=within_seconds)
     result = await db.execute(
         select(PriceSnapshot)
         .where(PriceSnapshot.symbol == symbol)
