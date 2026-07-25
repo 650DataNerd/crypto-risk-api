@@ -106,6 +106,13 @@ API docs available at: http://127.0.0.1:8000/docs
 |--------|----------|------|-------------|
 | GET | /portfolios/{id}/holdings/ | Yes | List holdings |
 | POST | /portfolios/{id}/holdings/ | Yes | Add holding |
+| GET | /portfolios/{id}/holdings/value | Yes | Get portfolio value in USD |
+
+### Risk & Prices
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | /risk/prices/{symbol} | Yes | Latest price from Redis cache |
+| GET | /risk/{symbol} | Yes | Volatility and max drawdown |
 
 ## Running Tests
 ```bash
