@@ -1,15 +1,16 @@
 import os
+
 os.environ["TESTING"] = "true"
 
-import pytest
 import pytest_asyncio
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+
 from app.core.config import settings
 from app.core.database import Base, get_db
-from app.models import User, Portfolio, Holding, PriceSnapshot
 from app.core.security import hash_password
+from app.models import Portfolio, User
 from main import app
 
 

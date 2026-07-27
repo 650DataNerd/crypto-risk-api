@@ -1,8 +1,10 @@
 import json
+
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.cache import delete_cached, get_cached, set_cached
 from app.repositories.portfolio_repository import PortfolioRepository
 from app.schemas.portfolio import PortfolioCreate, PortfolioResponse
-from app.core.cache import get_cached, set_cached, delete_cached
 
 
 def _cache_key(user_id: int) -> str:

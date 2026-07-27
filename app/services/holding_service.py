@@ -1,5 +1,5 @@
-from decimal import Decimal
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.repositories.holding_repository import HoldingRepository
 from app.schemas.holding import HoldingCreate, HoldingResponse
 

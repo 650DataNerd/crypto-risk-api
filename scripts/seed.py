@@ -1,9 +1,9 @@
 import asyncio
-from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.database import AsyncSessionLocal
-from app.models.user import User
-from app.models.portfolio import Portfolio
 from app.models.holding import Holding
+from app.models.portfolio import Portfolio
+from app.models.user import User
 
 
 async def seed():

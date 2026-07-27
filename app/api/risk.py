@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.models.user import User
-from app.services.risk_service import get_risk_metrics
 from app.services.price_service import get_latest_price
+from app.services.risk_service import get_risk_metrics
 
 router = APIRouter(prefix="/risk", tags=["risk"])
 

@@ -1,5 +1,10 @@
 from fastapi import APIRouter
-from app.services.health_service import get_health_status, get_version_info, get_ping_status
+
+from app.services.health_service import (
+    get_health_status,
+    get_ping_status,
+    get_version_info,
+)
 
 router = APIRouter()
 

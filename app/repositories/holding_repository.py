@@ -1,7 +1,9 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from app.models.holding import Holding
 from decimal import Decimal
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models.holding import Holding
 
 
 class HoldingRepository:

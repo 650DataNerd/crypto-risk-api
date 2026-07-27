@@ -1,6 +1,8 @@
 from decimal import Decimal
-from sqlalchemy.ext.asyncio import AsyncSession
+
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.models.price_snapshot import PriceSnapshot
 
 
@@ -39,14 +41,12 @@ def compute_max_drawdown(prices: list[Decimal]) -> Decimal | None:
         return None
 
     peak = prices[0]
-    max_drawdown = Decimal("0")
+    max_drawdown = Decimal(0)
 
     for price in prices[1:]:
-        if price > peak:
-            peak = price
+        peak = max(peak, price)
         drawdown = (price - peak) / peak
-        if drawdown < max_drawdown:
-            max_drawdown = drawdown
+        max_drawdown = min(max_drawdown, drawdown)
 
     return max_drawdown
 

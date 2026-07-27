@@ -1,4 +1,5 @@
 from decimal import Decimal
+
 from app.models.price_snapshot import PriceSnapshot
 
 
