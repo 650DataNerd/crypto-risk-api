@@ -1,12 +1,13 @@
-import httpx
 import json
-from decimal import Decimal
 from datetime import datetime, timedelta
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from app.core.cache import set_cached, get_cached
-from app.models.price_snapshot import PriceSnapshot
+from decimal import Decimal
 
+import httpx
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.cache import get_cached, set_cached
+from app.models.price_snapshot import PriceSnapshot
 
 COINGECKO_URL = "https://api.coingecko.com/api/v3/simple/price"
 SYMBOLS = ["bitcoin", "ethereum"]
@@ -73,7 +74,7 @@ async def get_latest_price(symbol: str) -> Decimal | None:
 
 
 async def get_portfolio_value(holdings: list) -> dict:
-    total_value = Decimal("0")
+    total_value = Decimal(0)
     breakdown = []
 
     for holding in holdings:

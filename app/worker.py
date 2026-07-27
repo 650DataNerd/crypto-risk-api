@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.database import AsyncSessionLocal
 from app.services.price_service import ingest_prices
 

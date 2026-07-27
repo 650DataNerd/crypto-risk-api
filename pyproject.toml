@@ -26,7 +26,21 @@ dev = [
     "httpx2>=2.5.0",
     "pytest>=8.2,<9",
     "pytest-asyncio==0.23.8",
+    "ruff>=0.16.0",
 ]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+ignore = [
+    "B008",    # FastAPI Depends() in function defaults - this is correct FastAPI usage
+    "BLE001",  # Blind exception catch - intentional for Redis graceful fallback
+    "S110",    # try-except-pass - intentional for Redis graceful fallback
+    "DTZ003",  # datetime.utcnow() - matches Postgres TIMESTAMP WITHOUT TIMEZONE column
+]
+
+

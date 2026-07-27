@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.models.user import User
+from app.repositories.holding_repository import HoldingRepository
+from app.repositories.portfolio_repository import PortfolioRepository
 from app.schemas.holding import HoldingCreate, HoldingResponse
 from app.services.holding_service import create_holding, get_holdings
 from app.services.price_service import get_portfolio_value
-from app.repositories.portfolio_repository import PortfolioRepository
-from app.repositories.holding_repository import HoldingRepository
 
 router = APIRouter(prefix="/portfolios/{portfolio_id}/holdings", tags=["holdings"])
 
