@@ -26,6 +26,7 @@ dev = [
     "httpx2>=2.5.0",
     "pytest>=8.2,<9",
     "pytest-asyncio==0.23.8",
+    "pytest-cov>=7.1.0",
     "ruff>=0.16.0",
 ]
 [tool.pytest.ini_options]
@@ -44,3 +45,12 @@ ignore = [
 ]
 
 
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    "app/worker.py",
+    "app/services/price_service.py",
+]
+
+[tool.coverage.report]
+fail_under = 75
