@@ -70,3 +70,32 @@ async def test_me_returns_current_user(auth_client, test_user):
 async def test_me_without_token_returns_401(client):
     response = await client.get("/auth/me")
     assert response.status_code == 401
+
+
+async def test_tampered_token_returns_401(client):
+    response = await client.get(
+        "/auth/me", headers={"Authorization": "Bearer abc.def.ghi"}
+    )
+    assert response.status_code == 401
+
+
+async def test_expired_token_returns_401(client, test_user):
+    from datetime import UTC, datetime, timedelta
+
+    import jwt
+
+    from app.core.config import settings
+
+    expired = jwt.encode(
+        {
+            "sub": str(test_user.id),
+            "exp": datetime.now(UTC) - timedelta(minutes=1),
+            "type": "access",
+        },
+        settings.secret_key,
+        algorithm=settings.algorithm,
+    )
+    response = await client.get(
+        "/auth/me", headers={"Authorization": f"Bearer {expired}"}
+    )
+    assert response.status_code == 401

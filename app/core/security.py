@@ -1,6 +1,7 @@
 from datetime import UTC, datetime, timedelta
 
-from jose import JWTError, jwt
+import jwt
+from jwt import InvalidTokenError
 from passlib.context import CryptContext
 
 from app.core.config import settings
@@ -32,5 +33,5 @@ def decode_access_token(token: str) -> int:
     payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
     user_id = payload.get("sub")
     if user_id is None:
-        raise JWTError("Missing subject claim")
+        raise InvalidTokenError("Missing subject claim")
     return int(user_id)
