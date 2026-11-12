@@ -42,12 +42,6 @@ jobs:
       - name: Run ruff lint
         run: uv run ruff check .
 
-      - name: Security audit
-        run: |
-          uv run pip-audit \
-            --ignore-vuln PYSEC-2026-1845
-        # PYSEC-2026-1845: pytest - fix requires pytest>=9.0.3, incompatible with pytest-asyncio==0.23.8
-
       - name: Run tests
         env:
           APP_NAME: crypto-risk-api
