@@ -1,3 +1,5 @@
+[![CI](https://github.com/650DataNerd/crypto-risk-api/actions/workflows/ci.yml/badge.svg)](https://github.com/650DataNerd/crypto-risk-api/actions/workflows/ci.yml)
+
 # Crypto Risk API
 
 A production-grade backend API for tracking cryptocurrency portfolios and computing
